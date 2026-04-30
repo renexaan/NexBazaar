@@ -7,6 +7,7 @@
 cd backend
 npm install
 node server.js
+# Open https://localhost:5000
 ```
 
 ### 2. Frontend
