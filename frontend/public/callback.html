@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexBazaar — Signing in…</title>
+  <link rel="stylesheet" href="src/styles/global.css">
+  <style>
+    .callback-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      background: var(--apple-bg);
+    }
+    .callback-logo {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .callback-logo .brand-icon {
+      width: 36px; height: 36px;
+      background: var(--apple-blue);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+    }
+    .callback-logo .brand-icon svg { width: 18px; height: 18px; }
+    .callback-logo span {
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--apple-label);
+    }
+    .callback-card {
+      background: var(--apple-surface);
+      border: 1px solid var(--apple-border-2);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 48px;
+      text-align: center;
+      max-width: 360px; width: 100%;
+      animation: cardIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .callback-spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--apple-fill-2);
+      border-top-color: var(--apple-blue);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .callback-title {
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--apple-label);
+      margin-bottom: 6px;
+    }
+    .callback-sub {
+      font-size: 14px; color: var(--apple-label-2);
+    }
+    .error-state { display: none; flex-direction: column; align-items: center; gap: 14px; }
+    .error-icon {
+      width: 48px; height: 48px;
+      background: rgba(255,59,48,0.10);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--apple-red);
+      margin: 0 auto;
+    }
+    .error-icon svg { width: 24px; height: 24px; }
+  </style>
+</head>
+<body>
+
+  <div class="callback-wrap">
+    <div class="callback-logo">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+      </div>
+      <span>NexBazaar</span>
+    </div>
+
+    <div class="callback-card">
+      <!-- Loading state -->
+      <div id="loadingState">
+        <div class="callback-spinner"></div>
+        <p class="callback-title">Signing you in…</p>
+        <p class="callback-sub">Just a moment while we verify your account.</p>
+      </div>
+
+      <!-- Error state -->
+      <div class="error-state" id="errorState">
+        <div class="error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <p class="callback-title">Something went wrong</p>
+        <p class="callback-sub" id="errorMsg">Authentication failed. Please try again.</p>
+        <a href="login.html" class="btn-primary" style="margin-top:8px; text-decoration:none;">Back to sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/callback.js"></script>
+</body>
+</html>

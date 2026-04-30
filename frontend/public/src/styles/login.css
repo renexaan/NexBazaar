@@ -1,0 +1,128 @@
+/* login.css — Pure black background, white floating card */
+
+.login-root { min-height: 100vh; display: flex; background: #000000; }
+
+/* ── Left panel ── */
+.login-left {
+  flex: 1; background: #000000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 56px; position: relative; overflow: hidden;
+}
+.login-left::before {
+  content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,113,227,0.18) 0%, transparent 65%);
+  top: -100px; right: -100px; pointer-events: none;
+}
+.login-left::after {
+  content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(191,90,242,0.12) 0%, transparent 65%);
+  bottom: -80px; left: -80px; pointer-events: none;
+}
+.login-left-inner { position: relative; z-index: 1; max-width: 400px; }
+
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; margin-bottom: 72px; transition: opacity 0.2s ease; }
+.brand:hover { opacity: 0.75; text-decoration: none; }
+.brand-logo-img { height: 64px; width: auto; display: block; }
+.brand-icon { width: 40px; height: 40px; background: #0071e3; border-radius: 11px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+.brand-icon svg { width: 20px; height: 20px; }
+.brand-name { font-size: 21px; font-weight: 700; letter-spacing: -0.04em; color: #ffffff; }
+
+.hero-text { margin-bottom: 52px; }
+.hero-text h1 { font-size: clamp(36px, 4.5vw, 52px); font-weight: 700; letter-spacing: -0.045em; line-height: 1.06; color: #ffffff; margin-bottom: 18px; }
+.hero-text h1 em { font-style: normal; color: #47a9ff; }
+.hero-text p { font-size: 17px; line-height: 1.65; color: rgba(255,255,255,0.55); max-width: 320px; letter-spacing: -0.01em; }
+
+.trust-badges { display: flex; flex-direction: column; gap: 14px; }
+.trust-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.42); }
+.trust-item svg { width: 16px; height: 16px; color: #30d158; flex-shrink: 0; }
+
+/* ── Right panel ── */
+.login-right {
+  width: 500px; flex-shrink: 0; background: #000000;
+  display: flex; align-items: center; justify-content: center; padding: 48px 40px;
+}
+
+/* ── Card — white floating on black ── */
+.login-card {
+  width: 100%; max-width: 400px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 24px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.03),
+              0 8px 32px rgba(0,0,0,0.45),
+              0 32px 80px rgba(0,0,0,0.55);
+  padding: 40px 36px 32px;
+  display: flex; flex-direction: column; gap: 22px;
+  animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card-logo { display: none; align-items: center; gap: 8px; }
+.card-logo-img { height: 32px; width: auto; display: block; }
+.card-logo .brand-name { color: #1d1d1f; font-size: 17px; }
+.card-title { font-size: 26px; font-weight: 700; letter-spacing: -0.035em; color: #1d1d1f; line-height: 1.15; }
+.card-sub { font-size: 15px; color: #6e6e73; margin-top: -14px; letter-spacing: -0.01em; }
+
+/* Error banner */
+.error-banner {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(255,59,48,0.07); border: 1px solid rgba(255,59,48,0.2);
+  border-radius: 10px; padding: 12px 14px;
+  font-size: 13px; font-weight: 500; color: #c5150b; line-height: 1.45;
+}
+.error-banner svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+
+.field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #aeaeb2; }
+
+/* ── Role cards ── */
+.role-grid { display: flex; flex-direction: column; gap: 10px; }
+.role-card {
+  width: 100%; display: flex; align-items: center; gap: 14px;
+  padding: 15px 16px; border: 1.5px solid #e8e8ed; border-radius: 14px;
+  background: #ffffff; text-align: left; cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease,
+              box-shadow 0.25s cubic-bezier(0.16,1,0.3,1), transform 0.15s ease;
+}
+.role-card:hover { border-color: #c7c7cc; background: #fafafa; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.role-card.selected { border-color: #0071e3; background: rgba(0,113,227,0.03); box-shadow: 0 0 0 4px rgba(0,113,227,0.15); transform: translateY(0); }
+.role-icon-wrap { width: 40px; height: 40px; background: #f5f5f7; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s ease; }
+.role-icon-wrap svg { width: 18px; height: 18px; color: #6e6e73; transition: color 0.2s ease; }
+.role-card.selected .role-icon-wrap { background: rgba(0,113,227,0.10); }
+.role-card.selected .role-icon-wrap svg { color: #0071e3; }
+.role-info { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.role-name { font-size: 15px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.01em; }
+.role-desc { font-size: 13px; color: #6e6e73; }
+.role-check { width: 22px; height: 22px; flex-shrink: 0; opacity: 0; transform: scale(0.5); transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1); color: #0071e3; }
+.role-check svg { width: 22px; height: 22px; }
+.role-card.selected .role-check { opacity: 1; transform: scale(1); }
+
+/* ── Google button ── */
+.google-btn {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 13px 20px; border: 1.5px solid #d2d2d7; border-radius: 14px;
+  background: #ffffff; font-size: 15px; font-weight: 600; color: #1d1d1f;
+  letter-spacing: -0.01em; cursor: not-allowed; opacity: 0.4;
+  transition: background 0.2s ease, border-color 0.2s ease,
+              opacity 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+}
+.google-btn:not([disabled]) { cursor: pointer; opacity: 1; }
+.google-btn:not([disabled]):hover { background: #f5f5f7; border-color: #aeaeb2; box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.google-btn:not([disabled]):active { transform: scale(0.98) translateY(0); }
+.google-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* Footer */
+.card-footer-text { font-size: 12px; color: #aeaeb2; text-align: center; line-height: 1.55; }
+.card-footer-text a { color: #6e6e73; text-decoration: underline; text-underline-offset: 2px; transition: color 0.15s ease; }
+.card-footer-text a:hover { color: #1d1d1f; }
+
+/* ── Responsive ── */
+@media (max-width: 680px) {
+  .login-root { flex-direction: column; }
+  .login-left { display: none; }
+  .login-right { width: 100%; min-height: 100vh; padding: 40px 20px; background: #000000; }
+  .card-logo { display: flex; }
+  .login-card { padding: 32px 24px 28px; }
+}

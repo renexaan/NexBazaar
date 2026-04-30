@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexBazaar — Admin Dashboard</title>
+  <link rel="stylesheet" href="src/styles/global.css">
+  <style>
+    .admin-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 12px;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: var(--r-md);
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    .tab-btn.active { color: #fff; background: var(--blue); }
+
+    .order-card {
+      background: var(--white);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-2);
+    }
+    .order-customer { display: flex; align-items: center; gap: 10px; }
+    .order-customer-info { display: flex; flex-direction: column; }
+    .order-customer-name { font-size: 14px; font-weight: 700; color: var(--black); }
+    .order-customer-email { font-size: 12px; color: var(--label-2); }
+    
+    .order-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--label);
+    }
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-2);
+    }
+    .order-total { font-size: 16px; font-weight: 700; color: var(--black); }
+
+    .admin-message-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      font-size: 13px;
+      margin-top: 8px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .admin-message-input:focus { border-color: var(--blue); }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="admin.html" class="navbar-brand">
+      <img src="logo.png" alt="NexBazaar" class="navbar-logo-img">
+    </a>
+    <div class="navbar-spacer"></div>
+    <div class="navbar-user" id="navbarUser">
+      <div class="spinner"></div>
+    </div>
+  </nav>
+
+  <main class="page-content">
+
+    <div style="margin-bottom: 32px;">
+      <h1 class="section-title">Admin Dashboard</h1>
+      <p class="section-sub">Governance and platform oversight.</p>
+    </div>
+
+    <!-- Welcome banner -->
+    <div class="welcome-banner" id="welcomeBanner">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="tab-btn active" onclick="switchTab('users')">Customer Approvals</button>
+      <button class="tab-btn" onclick="switchTab('orders')">Order Requests</button>
+    </div>
+
+    <!-- Users Section -->
+    <div id="usersSection">
+      <div class="section-container">
+        <h2 style="margin-bottom: 16px; font-size: 17px; font-weight: 700; color: var(--black);">Pending Account Access</h2>
+        <div id="pendingUsersContainer">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div id="ordersSection" class="hidden">
+      <div class="section-container">
+        <h2 style="margin-bottom: 16px; font-size: 17px; font-weight: 700; color: var(--black);">Pending Order Requests</h2>
+        <div id="pendingOrdersContainer">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="src/auth.js"></script>
+  <script src="src/admin.js"></script>
+</body>
+</html>
