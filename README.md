@@ -1,30 +1,54 @@
-# NexBazaar
+# NexBazaar 🛍️
 
-## How to run
+NexBazaar is a premium procurement platform designed for seamless administrative order processing and high-performance 3D browsing experiences.
 
-### 1. Backend
-```bash
-cd backend
-npm install
-node server.js
-```
+## 🚀 Features
+- **Cinematic Shop UI**: Premium product catalog with GSAP-powered animations.
+- **Role-Based Access**: Distinct flows for Customers and Administrators.
+- **Google OAuth**: Secure authentication via Google.
+- **Admin Dashboard**: Specialized interface for managing products and approving orders.
+- **Order Tracking**: Real-time feedback and message persistence for order status updates.
 
-### 2. Frontend
-```bash
-cd frontend
-node serve.js
-# Open http://localhost:3000
-```
+## 🛠️ Technology Stack
+- **Frontend**: HTML5, CSS3 (Vanilla), JavaScript, GSAP (Animations).
+- **Backend**: Node.js, Express, MongoDB, Mongoose.
+- **Auth**: Passport.js (Google Strategy), JWT.
 
-## Pages
-- `login.html`    → Role selection + Google sign in
-- `shop.html`     → Customer landing page (empty shop)
-- `admin.html`    → Admin dashboard (verified access only)
-- `callback.html` → Handles JWT after Google OAuth
+## 🏁 Getting Started
 
-## Flow
-1. Select Customer or Admin
-2. Sign in with Google
-3. Customer → shop.html
-4. Admin → admin.html (must have Admin role in MongoDB)
-5. Unauthorized Admin attempt → error on login page
+### 1. Prerequisites
+- [Node.js](https://nodejs.org/) installed.
+- [MongoDB](https://www.mongodb.com/) running locally or a MongoDB Atlas URI.
+
+### 2. Backend Setup
+1. Navigate to the backend folder:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file based on `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+4. Start the server:
+   ```bash
+   npm run dev  # Starts with nodemon
+   ```
+
+### 3. Frontend Setup
+1. Navigate to the frontend folder:
+   ```bash
+   cd frontend
+   ```
+2. Start the static server:
+   ```bash
+   node serve.js
+   ```
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 📂 Project Structure
+- `/backend`: Express API, Mongoose models, and authentication logic.
+- `/frontend`: Static assets, styles, and client-side logic.
