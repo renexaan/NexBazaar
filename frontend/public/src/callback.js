@@ -4,7 +4,7 @@
   const hash = window.location.hash.substring(1); // remove '#'
   const params = new URLSearchParams(hash);
 
-  const token    = params.get('token');
+  const token = params.get('token');
   const redirect = params.get('redirect') || 'shop';
 
   function showError(msg) {

@@ -66,7 +66,7 @@ function renderNavUser(user, navbarUserEl) {
     : '??';
 
   const avatarHTML = user.avatar
-    ? `<img class="navbar-avatar" src="${user.avatar}" alt="${user.name}">`
+    ? `<img class="navbar-avatar" src="${user.avatar}" alt="${user.name}" referrerpolicy="no-referrer">`
     : `<div class="navbar-avatar-placeholder">${initials}</div>`;
 
   navbarUserEl.innerHTML = `
