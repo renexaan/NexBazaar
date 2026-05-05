@@ -29,6 +29,21 @@
       <p>Review your past procurement requests and invoices.</p>
     </header>
 
+    <div class="orders-toolbar" style="max-width: 1000px; margin: 0 auto 24px; padding: 0 24px; display: flex; gap: 16px; justify-content: space-between; flex-wrap: wrap;">
+      <div class="stats-panel" style="display: flex; gap: 16px; font-size: 14px; color: rgba(255,255,255,0.7);">
+        <div style="background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 8px;">Total Orders: <strong id="statCount" style="color:white;">0</strong></div>
+        <div style="background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 8px;">Total Spent: <strong id="statSpent" style="color:white;">₹0</strong></div>
+      </div>
+      <div class="filters-panel" style="display: flex; gap: 12px;">
+        <input type="text" id="orderSearch" placeholder="Search ID..." style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 12px; border-radius: 8px; outline: none;" onkeyup="filterUI()">
+        <select id="statusFilter" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 12px; border-radius: 8px; outline: none;" onchange="filterUI()">
+          <option value="all" style="color: black;">All Statuses</option>
+          <option value="pending" style="color: black;">Pending</option>
+          <option value="approved" style="color: black;">Approved</option>
+          <option value="rejected" style="color: black;">Rejected</option>
+        </select>
+      </div>
+    </div>
     <div class="orders-container" id="ordersContainer">
       <div class="spinner" style="margin: 40px auto;"></div>
     </div>
@@ -36,76 +51,142 @@
 
   <script src="src/auth.js"></script>
   <script>
+    let allOrdersCache = JSON.parse(localStorage.getItem('nexbazaar_orders_cache') || '[]');
+    let pollInterval;
+
     document.addEventListener('DOMContentLoaded', async () => {
-      // 1. Auth Check
       const user = requireAuth('customer');
-      if (!user) return; // requireAuth handles redirect
+      if (!user) return; 
 
       const token = localStorage.getItem('nexbazaar_token');
-      
-      // Setup navbar user using shared function
       const navbarUserEl = document.getElementById('navbarUser');
       renderNavUser(user, navbarUserEl);
 
-      // 2. Fetch Orders
-      loadOrders(token);
+      loadOrders(token, true);
+      startPolling(token);
     });
 
-    async function loadOrders(token) {
+    function showSkeletons() {
       const container = document.getElementById('ordersContainer');
+      container.innerHTML = Array(3).fill('<div class="skeleton-card"></div>').join('');
+    }
+
+    async function loadOrders(token, useCache = true) {
+      const container = document.getElementById('ordersContainer');
+      
+      if (useCache && allOrdersCache.length > 0) {
+        renderOrders(allOrdersCache);
+        updateStats(allOrdersCache);
+      } else {
+        showSkeletons();
+      }
+
       try {
         const res = await fetch(`${BACKEND_URL}/api/orders`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!res.ok) throw new Error('Failed to fetch orders');
         const orders = await res.json();
-
-        if (orders.length === 0) {
-          container.innerHTML = `
-            <div class="empty-state">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.3;">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-              </svg>
-              <h2>No history found</h2>
-              <p>You haven't made any procurement requests yet.</p>
-              <a href="shop.html" class="view-invoice-btn" style="margin-top: 16px;">Go to Shop</a>
-            </div>
-          `;
-          return;
+        
+        if (JSON.stringify(orders) !== JSON.stringify(allOrdersCache)) {
+          allOrdersCache = orders;
+          localStorage.setItem('nexbazaar_orders_cache', JSON.stringify(orders));
+          filterUI(); 
+          updateStats(orders);
         }
-
-        container.innerHTML = orders.map(order => {
-          const date = new Date(order.createdAt).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric'
-          });
-          
-          let statusClass = 'status-pending';
-          if (order.status === 'approved') statusClass = 'status-approved';
-          if (order.status === 'rejected') statusClass = 'status-rejected';
-
-          return `
-            <div class="order-card">
-              <div class="order-header">
-                <div class="order-date">Placed on ${date}</div>
-                <div class="order-total">₹${order.totalAmount.toLocaleString()}</div>
-              </div>
-              <div class="order-body">
-                <div>
-                  <div class="order-status ${statusClass}">${order.status}</div>
-                  ${order.adminMessage ? `<div class="admin-msg"><b>Admin Note:</b> ${order.adminMessage}</div>` : ''}
-                </div>
-                <a href="invoice.html?id=${order._id}" class="view-invoice-btn">View Invoice</a>
-              </div>
-            </div>
-          `;
-        }).join('');
-
       } catch (err) {
         console.error(err);
-        container.innerHTML = `<div class="empty-state" style="color: #ff453a;">Failed to load history. Please try again later.</div>`;
+        if (allOrdersCache.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state" style="color: #ff453a;">
+              Failed to load history. <button class="view-invoice-btn" onclick="loadOrders('${token}', false)" style="margin-top:10px;">Retry</button>
+            </div>`;
+        }
       }
+    }
+
+    function renderOrders(ordersToRender) {
+      const container = document.getElementById('ordersContainer');
+      if (ordersToRender.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state fade-in">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.3;">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <h2>No history found</h2>
+            <p>We couldn't find any procurement requests matching your filters.</p>
+            <a href="shop.html" class="view-invoice-btn" style="margin-top: 16px;">Go to Shop</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = ordersToRender.map(order => {
+        const date = new Date(order.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'short', day: 'numeric'
+        });
+        
+        let statusClass = 'status-pending';
+        if (order.status === 'approved') statusClass = 'status-approved';
+        if (order.status === 'rejected') statusClass = 'status-rejected';
+
+        const shortId = 'NBZ-' + order._id.substring(order._id.length - 6).toUpperCase();
+
+        return `
+          <div class="order-card fade-in">
+            <div class="order-header">
+              <div class="order-date">Placed on ${date} <span style="margin-left: 8px; opacity: 0.5;">ID: ${shortId}</span></div>
+              <div class="order-total">₹${order.totalAmount.toLocaleString()}</div>
+            </div>
+            <div class="order-body">
+              <div>
+                <div class="order-status ${statusClass}">${order.status}</div>
+                ${order.adminMessage ? `<div class="admin-msg"><b>Admin Note:</b> ${order.adminMessage}</div>` : ''}
+              </div>
+              <a href="invoice.html?id=${order._id}" class="view-invoice-btn">View Invoice</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateStats(orders) {
+      document.getElementById('statCount').innerText = orders.length;
+      const total = orders.reduce((sum, o) => sum + o.totalAmount, 0);
+      document.getElementById('statSpent').innerText = '₹' + total.toLocaleString();
+    }
+
+    window.filterUI = function() {
+      const query = document.getElementById('orderSearch').value.toLowerCase();
+      const status = document.getElementById('statusFilter').value;
+      
+      const filtered = allOrdersCache.filter(o => {
+        const shortId = 'nbz-' + o._id.substring(o._id.length - 6).toLowerCase();
+        const matchesSearch = shortId.includes(query) || o._id.toLowerCase().includes(query);
+        const matchesStatus = status === 'all' || o.status === status;
+        return matchesSearch && matchesStatus;
+      });
+      renderOrders(filtered);
+    };
+
+    function startPolling(token) {
+      if (pollInterval) clearInterval(pollInterval);
+      pollInterval = setInterval(async () => {
+        try {
+          const res = await fetch(`${BACKEND_URL}/api/orders`, { headers: { 'Authorization': `Bearer ${token}` } });
+          if (!res.ok) return;
+          const orders = await res.json();
+          
+          if (JSON.stringify(orders) !== JSON.stringify(allOrdersCache)) {
+            allOrdersCache = orders;
+            localStorage.setItem('nexbazaar_orders_cache', JSON.stringify(orders));
+            filterUI(); 
+            updateStats(orders);
+          }
+        } catch (e) {}
+      }, 20000);
     }
   </script>
 </body>

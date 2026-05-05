@@ -233,3 +233,11 @@ body {
     max-width: 100%;
   }
 }
+
+/* Mobile Responsiveness for Invoice */
+@media (max-width: 600px) {
+  .invoice-wrapper { padding: 30px 20px; }
+  .invoice-info { flex-direction: column; gap: 20px; }
+  .info-block { text-align: left !important; }
+  .invoice-table { display: block; overflow-x: auto; white-space: nowrap; }
+}

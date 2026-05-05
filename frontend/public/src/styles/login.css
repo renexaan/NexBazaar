@@ -13,9 +13,9 @@
   content: '';
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 60% at 15% 30%, rgba(124,58,237,0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 85% 70%, rgba(6,182,212,0.14) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 50% 10%, rgba(244,63,94,0.08) 0%, transparent 50%);
+    radial-gradient(ellipse 70% 60% at 15% 30%, rgba(29,61,138,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 85% 70%, rgba(227,177,4,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 10%, rgba(29,61,138,0.15) 0%, transparent 50%);
   filter: blur(50px);
   animation: aurora-drift 12s ease-in-out infinite alternate;
 }
@@ -39,7 +39,7 @@
 }
 .brand:hover { opacity: 0.75; text-decoration: none; }
 .brand-logo-img { height: 60px; width: auto; display: block; }
-.brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #7c3aed, #06b6d4); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; box-shadow: 0 8px 24px rgba(124,58,237,0.4); }
+.brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #1d3d8a, #e3b104); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; box-shadow: 0 8px 24px rgba(29,61,138,0.4); }
 .brand-icon svg { width: 20px; height: 20px; }
 .brand-name { font-size: 22px; font-weight: 800; letter-spacing: -0.05em; color: #fff; }
 
@@ -52,7 +52,7 @@
 }
 .hero-text h1 em {
   font-style: normal;
-  background: linear-gradient(90deg, #a78bfa, #67e8f9);
+  background: linear-gradient(90deg, #93c5fd, #fef08a);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .hero-text p { font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.45); max-width: 340px; letter-spacing: -0.01em; }
@@ -75,7 +75,7 @@
   border: 1px solid rgba(255,255,255,0.09);
   border-radius: 28px;
   box-shadow:
-    0 0 0 1px rgba(124,58,237,0.1),
+    0 0 0 1px rgba(29,61,138,0.2),
     0 8px 40px rgba(0,0,0,0.6),
     0 40px 100px rgba(0,0,0,0.5),
     inset 0 1px 0 rgba(255,255,255,0.06);
@@ -89,7 +89,7 @@
 .login-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(124,58,237,0.6), rgba(6,182,212,0.6), transparent);
+  background: linear-gradient(90deg, transparent, rgba(29,61,138,0.6), rgba(227,177,4,0.6), transparent);
 }
 @keyframes cardIn {
   from { opacity: 0; transform: translateY(24px) scale(0.97); }
@@ -127,15 +127,15 @@
   transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
 }
 .role-card:hover {
-  border-color: rgba(124,58,237,0.3);
-  background: rgba(124,58,237,0.07);
+  border-color: rgba(29,61,138,0.4);
+  background: rgba(29,61,138,0.1);
   transform: translateY(-1px);
   box-shadow: 0 6px 24px rgba(0,0,0,0.3);
 }
 .role-card.selected {
-  border-color: rgba(124,58,237,0.6);
-  background: rgba(124,58,237,0.12);
-  box-shadow: 0 0 0 3px rgba(124,58,237,0.2), 0 8px 32px rgba(0,0,0,0.3);
+  border-color: rgba(29,61,138,0.8);
+  background: rgba(29,61,138,0.2);
+  box-shadow: 0 0 0 3px rgba(29,61,138,0.3), 0 8px 32px rgba(0,0,0,0.3);
   transform: translateY(0);
 }
 .role-icon-wrap {
@@ -145,12 +145,12 @@
   flex-shrink: 0; transition: all 0.25s ease;
 }
 .role-icon-wrap svg { width: 18px; height: 18px; color: rgba(255,255,255,0.4); transition: color 0.2s ease; }
-.role-card.selected .role-icon-wrap { background: rgba(124,58,237,0.18); border-color: rgba(124,58,237,0.3); }
-.role-card.selected .role-icon-wrap svg { color: #a78bfa; }
+.role-card.selected .role-icon-wrap { background: rgba(29,61,138,0.25); border-color: rgba(29,61,138,0.4); }
+.role-card.selected .role-icon-wrap svg { color: #93c5fd; }
 .role-info { flex: 1; display: flex; flex-direction: column; gap: 3px; }
 .role-name { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.85); letter-spacing: -0.02em; }
 .role-desc { font-size: 13px; color: rgba(255,255,255,0.35); }
-.role-check { width: 22px; height: 22px; flex-shrink: 0; opacity: 0; transform: scale(0.5); transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1); color: #a78bfa; }
+.role-check { width: 22px; height: 22px; flex-shrink: 0; opacity: 0; transform: scale(0.5); transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1); color: #93c5fd; }
 .role-check svg { width: 22px; height: 22px; }
 .role-card.selected .role-check { opacity: 1; transform: scale(1); }
 
