@@ -1,223 +1,127 @@
-/* shop.css — Apple-inspired premium catalog styling */
+/* shop.css — Aurora Theme: Vivid, Deep, Cinematic */
 
 :root {
-  --shop-bg: #000000;
-  --card-bg: rgba(28, 28, 30, 0.7);
-  --card-border: rgba(255, 255, 255, 0.1);
-  --accent-blue: #0071e3;
-  --accent-yellow: #ffd60a;
-  --text-dim: rgba(255, 255, 255, 0.6);
+  --shop-bg:    #06060a;
+  --card-bg:    rgba(22, 22, 31, 0.8);
+  --card-border: rgba(255, 255, 255, 0.07);
 }
 
-body {
-  background-color: var(--shop-bg);
-  overflow-x: hidden;
-}
+body { background-color: var(--shop-bg); overflow-x: hidden; }
 
-/* ── Background Animation Mesh ── */
+/* ── Aurora Background Mesh ── */
 .bg-mesh {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  z-index: -1;
-  background: radial-gradient(circle at 50% 50%, rgba(0, 113, 227, 0.15) 0%, transparent 50%),
-              radial-gradient(circle at 10% 10%, rgba(255, 214, 10, 0.05) 0%, transparent 40%);
-  filter: blur(80px);
-  pointer-events: none;
+  position: fixed; top: 0; left: 0; width: 120%; height: 120%;
+  z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(124,58,237,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(244,63,94,0.06) 0%, transparent 70%);
+  filter: blur(60px);
+  animation: aurora-drift 14s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-3%, 2%) scale(1.04); }
+  100% { transform: translate(2%, -3%) scale(0.97); }
 }
 
-/* ── Hero Section (Full Screen) ── */
+/* ── Hero Section ── */
 .shop-hero {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
-  text-align: center;
-  position: relative;
-  z-index: 10;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 32px; text-align: center;
+  position: relative; z-index: 10;
 }
 .shop-hero h1 {
-  font-size: clamp(44px, 10vw, 88px);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 1;
+  font-size: clamp(40px, 9vw, 96px);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1.0;
   margin-bottom: 24px;
-  background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.4) 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #a78bfa 40%, #67e8f9 75%, #fcd34d 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gradient-pan 6s linear infinite;
 }
+@keyframes gradient-pan {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.shop-hero .section-sub { font-size: 18px; color: rgba(255,255,255,0.45); margin-bottom: 0; font-weight: 400; letter-spacing: -0.01em; }
 
 /* ── Scroll Hint ── */
 .scroll-hint {
-  position: absolute;
-  bottom: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  color: var(--text-dim);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  animation: bounce 2s infinite;
+  position: absolute; bottom: 44px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  color: rgba(255,255,255,0.3);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  animation: scroll-bounce 2.5s ease-in-out infinite;
 }
-.scroll-hint svg { width: 20px; height: 20px; opacity: 0.5; }
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
+.scroll-hint svg { width: 20px; height: 20px; opacity: 0.4; }
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50%       { transform: translateY(8px); opacity: 1; }
 }
 
-/* ── Shop Interface Entry ── */
+/* ── Shop Interface ── */
 #shopInterface {
-  perspective: 2000px;
-  transform-origin: top center;
-  opacity: 0;
-  transform: rotateX(10deg) translateY(100px);
-  padding-top: 100px;
+  perspective: 2000px; transform-origin: top center;
+  opacity: 0; transform: rotateX(8deg) translateY(80px);
+  padding-top: 80px;
 }
 
-/* ── Interactive Category Bar ── */
+/* ── Category Nav ── */
 .category-nav {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 60px;
-  flex-wrap: wrap;
-  padding: 0 24px;
-}
-.cat-pill {
-  padding: 10px 24px;
-  border-radius: 30px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-dim);
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-}
-.cat-pill:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  transform: translateY(-2px);
-}
-.cat-pill.active {
-  background: #fff;
-  color: #000;
-  border-color: #fff;
-  box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+  display: flex; justify-content: center; gap: 10px;
+  margin-bottom: 56px; flex-wrap: wrap; padding: 0 24px;
 }
 
-/* ── The Product Grid ── */
+/* ── Product Grid & Cards (already in global) – just override sizes here ── */
 .product-grid {
-  display: grid;
+  padding: 0 24px 140px;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 24px;
-  padding: 0 24px 100px;
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
-.premium-card {
-  background: rgba(20, 20, 22, 0.4); /* Thinner glass */
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 28px;
-  padding: 20px;
-  aspect-ratio: 1 / 1.1; /* Almost square but slightly tall for text */
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
-  transform-style: preserve-3d;
-  position: relative;
-  overflow: hidden;
+/* ── Card inner glow on hover ── */
+.card-perspective { position: relative; }
+.card-perspective::after {
+  content: ''; position: absolute; inset: -1px; border-radius: 30px;
+  background: var(--grad-brand); opacity: 0; z-index: -1;
+  filter: blur(16px); transition: opacity 0.5s ease;
+  pointer-events: none;
 }
+.card-perspective:hover::after { opacity: 0.25; }
 
-.card-img-container {
-  aspect-ratio: 1 / 1;
-  width: 100%;
-  background: rgba(255,255,255,0.03);
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: translateZ(40px);
-  overflow: hidden;
+/* ── Awaiting / Processed section labels in drawer ── */
+#activeCartSection h3 {
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: var(--violet-light) !important;
+  font-weight: 700 !important;
   margin-bottom: 12px;
 }
-
-.card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 18px;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+#pendingOrdersSection h3 {
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: var(--amber-light) !important;
+  font-weight: 700 !important;
+}
+#processedOrdersSection h3 {
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: var(--cyan-light) !important;
+  font-weight: 700 !important;
 }
 
-.card-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-  line-height: 1.2;
-  margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* ── Cart Drawer override (force dark) ── */
+.cart-drawer { background: rgba(10, 10, 16, 0.95) !important; backdrop-filter: blur(40px) saturate(150%) !important; }
 
-.card-price {
-  font-size: 17px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.add-btn {
-  background: var(--accent-yellow);
-  color: #000;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 4px 12px rgba(255, 214, 10, 0.2);
-}
-.add-btn:hover {
-  transform: scale(1.2) rotate(90deg);
-  background: #fff;
-}
-.add-btn:active {
-  transform: scale(0.9);
-}
-
-/* ── Cart Float Re-design ── */
-.cart-float {
-  background: var(--accent-blue) !important;
-  box-shadow: 0 20px 40px rgba(0, 113, 227, 0.4) !important;
-  border: 2px solid rgba(255,255,255,0.1);
-}
-.cart-count {
-  background: var(--accent-yellow) !important;
-  color: #000 !important;
-  font-weight: 800 !important;
-}
-
-/* ── Loading States ── */
-.skeleton-card {
-  height: 400px;
-  background: linear-gradient(90deg, #1c1c1e 25%, #2c2c2e 50%, #1c1c1e 75%);
-  background-size: 200% 100%;
-  animation: skeleton-wave 1.5s infinite;
-  border-radius: 32px;
-}
-@keyframes skeleton-wave {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+/* ── Pending State ── */
+.empty-state { min-height: 60vh; }
