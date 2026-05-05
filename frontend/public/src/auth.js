@@ -1,7 +1,7 @@
 // auth.js — Shared auth guard & utilities for protected pages
 
 // Determine the backend URL dynamically
-const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
   ? 'http://localhost:5000'
   : 'https://nexbazaar-api.onrender.com'; // 👈 Replace this with your actual production URL when you deploy
 

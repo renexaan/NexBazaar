@@ -45,4 +45,23 @@ router.get('/', protect, async (req, res) => {
   }
 });
 
+// @desc    Get order by ID
+// @route   GET /api/orders/:id
+// @access  Private (Customer)
+router.get('/:id', protect, async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+    const order = await Order.findOne({ _id: req.params.id, customer: userId });
+    
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found or unauthorized' });
+    }
+    
+    res.json(order);
+  } catch (error) {
+    console.error('Order fetch error:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 module.exports = router;

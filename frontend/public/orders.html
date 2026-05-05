@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexBazaar — Order History</title>
+  <link rel="stylesheet" href="src/styles/global.css">
+  <link rel="stylesheet" href="src/styles/orders.css">
+</head>
+<body>
+
+  <!-- Interactive Background Mesh -->
+  <div class="bg-mesh"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="shop.html" class="navbar-brand">
+      <img src="logo.png" alt="NexBazaar" class="navbar-logo-img">
+    </a>
+    <div class="navbar-spacer"></div>
+    <div class="navbar-user" id="navbarUser">
+      <div class="spinner"></div>
+    </div>
+  </nav>
+
+  <main>
+    <header class="page-header">
+      <h1>Your History</h1>
+      <p>Review your past procurement requests and invoices.</p>
+    </header>
+
+    <div class="orders-container" id="ordersContainer">
+      <div class="spinner" style="margin: 40px auto;"></div>
+    </div>
+  </main>
+
+  <script src="src/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Auth Check
+      const user = requireAuth('customer');
+      if (!user) return; // requireAuth handles redirect
+
+      const token = localStorage.getItem('nexbazaar_token');
+      
+      // Setup navbar user using shared function
+      const navbarUserEl = document.getElementById('navbarUser');
+      renderNavUser(user, navbarUserEl);
+
+      // 2. Fetch Orders
+      loadOrders(token);
+    });
+
+    async function loadOrders(token) {
+      const container = document.getElementById('ordersContainer');
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/orders`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to fetch orders');
+        const orders = await res.json();
+
+        if (orders.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.3;">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              <h2>No history found</h2>
+              <p>You haven't made any procurement requests yet.</p>
+              <a href="shop.html" class="view-invoice-btn" style="margin-top: 16px;">Go to Shop</a>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = orders.map(order => {
+          const date = new Date(order.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric'
+          });
+          
+          let statusClass = 'status-pending';
+          if (order.status === 'approved') statusClass = 'status-approved';
+          if (order.status === 'rejected') statusClass = 'status-rejected';
+
+          return `
+            <div class="order-card">
+              <div class="order-header">
+                <div class="order-date">Placed on ${date}</div>
+                <div class="order-total">₹${order.totalAmount.toLocaleString()}</div>
+              </div>
+              <div class="order-body">
+                <div>
+                  <div class="order-status ${statusClass}">${order.status}</div>
+                  ${order.adminMessage ? `<div class="admin-msg"><b>Admin Note:</b> ${order.adminMessage}</div>` : ''}
+                </div>
+                <a href="invoice.html?id=${order._id}" class="view-invoice-btn">View Invoice</a>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="empty-state" style="color: #ff453a;">Failed to load history. Please try again later.</div>`;
+      }
+    }
+  </script>
+</body>
+</html>

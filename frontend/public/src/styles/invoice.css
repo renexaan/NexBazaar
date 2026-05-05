@@ -1,0 +1,235 @@
+/* invoice.css — Clean, Printable Invoice Style */
+
+:root {
+  --shop-bg: #06060a;
+}
+
+body {
+  background-color: var(--shop-bg);
+  color: #111;
+  font-family: 'Inter', -apple-system, sans-serif;
+  margin: 0;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+/* ── Interactive Background Mesh (Hidden on Print) ── */
+.bg-mesh {
+  position: fixed; top: 0; left: 0; width: 120%; height: 120%;
+  z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(124,58,237,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(244,63,94,0.06) 0%, transparent 70%);
+  filter: blur(60px);
+  animation: aurora-drift 14s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-3%, 2%) scale(1.04); }
+  100% { transform: translate(2%, -3%) scale(0.97); }
+}
+
+/* ── Invoice Paper ── */
+.invoice-wrapper {
+  background: #fff;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+  padding: 60px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  position: relative;
+  z-index: 10;
+}
+
+/* Header */
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 30px;
+  margin-bottom: 40px;
+}
+
+.invoice-brand img {
+  height: 40px;
+  margin-bottom: 12px;
+}
+
+.invoice-brand .tagline {
+  font-size: 13px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.invoice-meta {
+  text-align: right;
+}
+
+.invoice-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.invoice-id {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Info Section */
+.invoice-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.info-block h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #888;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.info-block p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* Table */
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 40px;
+}
+
+.invoice-table th {
+  text-align: left;
+  padding: 12px;
+  background: #f8f9fa;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  border-bottom: 2px solid #eaeaea;
+}
+
+.invoice-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #eaeaea;
+  font-size: 14px;
+}
+
+.invoice-table th.right,
+.invoice-table td.right {
+  text-align: right;
+}
+
+/* Totals */
+.invoice-totals {
+  width: 300px;
+  margin-left: auto;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eaeaea;
+  font-size: 14px;
+}
+
+.total-row.grand-total {
+  font-size: 20px;
+  font-weight: 800;
+  border-bottom: none;
+  border-top: 2px solid #111;
+  margin-top: 4px;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 20px;
+}
+
+.status-pending { background: #fff3cd; color: #856404; }
+.status-approved { background: #d4edda; color: #155724; }
+.status-rejected { background: #f8d7da; color: #721c24; }
+
+/* Actions */
+.invoice-actions {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.btn-print {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.btn-print:hover { transform: translateY(-2px); }
+
+.btn-back {
+  background: transparent;
+  color: #666;
+  border: 1px solid #ccc;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 12px;
+}
+
+/* Spinner */
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(0,0,0,0.1);
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 100px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Print Styles */
+@media print {
+  body {
+    background: none;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+  }
+  .bg-mesh, .invoice-actions {
+    display: none !important;
+  }
+  .invoice-wrapper {
+    box-shadow: none;
+    padding: 0;
+    max-width: 100%;
+  }
+}

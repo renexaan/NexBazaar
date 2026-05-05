@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexBazaar — Invoice</title>
+  <link rel="stylesheet" href="src/styles/invoice.css">
+</head>
+<body>
+
+  <!-- Interactive Background Mesh -->
+  <div class="bg-mesh"></div>
+
+  <div class="invoice-wrapper" id="invoiceWrapper">
+    <div class="spinner"></div>
+  </div>
+
+  <script src="src/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('id');
+      const wrapper = document.getElementById('invoiceWrapper');
+
+      if (!orderId) {
+        wrapper.innerHTML = `<div style="text-align:center; padding: 50px;">Invalid Order ID</div>`;
+        return;
+      }
+
+      const user = requireAuth('customer');
+      if (!user) return;
+      const token = localStorage.getItem('nexbazaar_token');
+
+      try {
+        const customerName = user.name;
+        const customerEmail = user.email || 'customer@nexbazaar.com'; // Fallback if email not in token
+
+        // Fetch Order Info
+        const orderRes = await fetch(`${BACKEND_URL}/api/orders/${orderId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (orderRes.status === 404) {
+           wrapper.innerHTML = `<div style="text-align:center; padding: 50px;">Invoice not found or unauthorized.</div>`;
+           return;
+        }
+        if (!orderRes.ok) throw new Error('Failed to fetch order');
+        const order = await orderRes.json();
+
+        // Render Invoice
+        const date = new Date(order.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        const itemsHtml = order.items.map(item => `
+          <tr>
+            <td>${item.name}</td>
+            <td class="right">${item.quantity}</td>
+            <td class="right">₹${item.price.toLocaleString()}</td>
+            <td class="right">₹${(item.quantity * item.price).toLocaleString()}</td>
+          </tr>
+        `).join('');
+
+        wrapper.innerHTML = `
+          <div class="invoice-header">
+            <div class="invoice-brand">
+              <img src="logo.png" alt="NexBazaar" style="filter: invert(1);">
+              <div class="tagline">Premium Procurement</div>
+            </div>
+            <div class="invoice-meta">
+              <h1 class="invoice-title">Invoice</h1>
+              <div class="invoice-id">#${order._id.substring(order._id.length - 8).toUpperCase()}</div>
+            </div>
+          </div>
+
+          <div class="invoice-info">
+            <div class="info-block">
+              <h3>Billed To</h3>
+              <p>${customerName}</p>
+              <p style="color: #666; font-size: 13px;">${customerEmail}</p>
+            </div>
+            <div class="info-block" style="text-align: right;">
+              <h3>Date of Issue</h3>
+              <p>${date}</p>
+            </div>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th class="right">Qty</th>
+                <th class="right">Unit Price</th>
+                <th class="right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHtml}
+            </tbody>
+          </table>
+
+          <div class="invoice-totals">
+            <div class="total-row">
+              <span>Subtotal</span>
+              <span>₹${order.totalAmount.toLocaleString()}</span>
+            </div>
+            <div class="total-row">
+              <span>Tax (0%)</span>
+              <span>₹0</span>
+            </div>
+            <div class="total-row grand-total">
+              <span>Total</span>
+              <span>₹${order.totalAmount.toLocaleString()}</span>
+            </div>
+          </div>
+
+          <div style="text-align: right;">
+            <div class="status-badge status-${order.status}">
+              ${order.status}
+            </div>
+          </div>
+
+          <div class="invoice-actions">
+            <a href="orders.html" class="btn-back">Back to Orders</a>
+            <button class="btn-print" onclick="window.print()">Print Invoice</button>
+          </div>
+        `;
+
+      } catch (err) {
+        console.error(err);
+        wrapper.innerHTML = `<div style="text-align:center; padding: 50px; color: red;">Error loading invoice.</div>`;
+      }
+    });
+  </script>
+</body>
+</html>
